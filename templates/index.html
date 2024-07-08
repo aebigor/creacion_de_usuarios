@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Usuarios</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            margin-top: 20px;
+            color: #4a90e2;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4a90e2;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            text-transform: uppercase;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #357ab8;
+        }
+
+        pre {
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 100%;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dashboard de Usuarios</h1>
+    <button id="leer-excel">Leer Excel</button>
+    <button id="guardar-excel">Guardar Excel</button>
+    <button id="crear-usuarios-excel">Crear Usuarios desde Excel</button>
+    <button id="eliminar-usuarios-excel">Eliminar Usuarios desde Excel</button>
+
+    <h2>Crear Usuario Individual</h2>
+    <form id="form-crear-usuario">
+        <label for="nombre">Nombre de Usuario:</label>
+        <input type="text" id="nombre" name="nombre" required>
+        <br>
+        <label for="contrasena">Contraseña:</label>
+        <input type="password" id="contrasena" name="contrasena" required>
+        <br>
+        <button type="submit">Crear Usuario</button>
+    </form>
+
+    <table id="tabla-usuarios">
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Contraseña</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <h2>Eliminar Usuario Individual</h2>
+    <form id="form-eliminar-usuario">
+        <label for="nombre-eliminar">Nombre de Usuario:</label>
+        <input type="text" id="nombre-eliminar" name="nombre-eliminar" required>
+        <br>
+        <button type="submit">Eliminar Usuario</button>
+    </form>
+    <h2>Crear Carpeta para Usuario</h2>
+    <form id="form-crear-carpeta">
+        <label for="nombre-usuario-carpeta">Nombre de Usuario:</label>
+        <input type="text" id="nombre-usuario-carpeta" name="nombre-usuario-carpeta" required>
+        <br>
+        <label for="nombre-carpeta">Nombre de Carpeta:</label>
+        <input type="text" id="nombre-carpeta" name="nombre-carpeta" required>
+        <br>
+        <button type="submit">Crear Carpeta</button>
+    </form>
+
+    <!-- Formulario para habilitar permisos -->
+    <form action="/habilitar_permisos" method="post">
+        <label for="nombre_usuario">Nombre de Usuario:</label>
+        <input type="text" id="nombre_usuario" name="nombre_usuario" required>
+        <label for="nombre_carpeta">Nombre de Carpeta:</label>
+        <input type="text" id="nombre_carpeta" name="nombre_carpeta" required>
+        <button type="submit">Habilitar Permisos</button>
+    </form>
+
+    <!-- Formulario para eliminar permisos -->
+    <form action="/eliminar_permisos" method="post">
+        <label for="nombre_usuario">Nombre de Usuario:</label>
+        <input type="text" id="nombre_usuario" name="nombre_usuario" required>
+        <label for="nombre_carpeta">Nombre de Carpeta:</label>
+        <input type="text" id="nombre_carpeta" name="nombre_carpeta" required>
+        <button type="submit">Eliminar Permisos</button>
+    </form>
+
+
+    <pre id="output"></pre>
+
+
+    <script>
+        document.getElementById('leer-excel').addEventListener('click', () => {
+            fetch('/leer_excel')
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.getElementById('tabla-usuarios').getElementsByTagName('tbody')[0];
+                    tbody.innerHTML = '';
+                    data.forEach(fila => {
+                        const tr = document.createElement('tr');
+                        const tdUsuario = document.createElement('td');
+                        tdUsuario.textContent = fila.Usuario;
+                        tdUsuario.contentEditable = true;
+                        const tdContrasena = document.createElement('td');
+                        tdContrasena.textContent = fila.Contrasena;
+                        tdContrasena.contentEditable = true;
+                        tr.appendChild(tdUsuario);
+                        tr.appendChild(tdContrasena);
+                        tbody.appendChild(tr);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        document.getElementById('guardar-excel').addEventListener('click', () => {
+            const tbody = document.getElementById('tabla-usuarios').getElementsByTagName('tbody')[0];
+            const filas = Array.from(tbody.getElementsByTagName('tr'));
+            const data = filas.map(fila => {
+                const celdas = fila.getElementsByTagName('td');
+                return {
+                    Usuario: celdas[0].textContent,
+                    Contrasena: celdas[1].textContent
+                };
+            });
+
+            fetch('/guardar_excel', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('output').textContent = data.message || data.error;
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        document.getElementById('crear-usuarios-excel').addEventListener('click', () => {
+            fetch('/crear_usuarios_excel', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('output').textContent = `Output: ${data.output}\nError: ${data.error}`;
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        document.getElementById('eliminar-usuarios-excel').addEventListener('click', () => {
+            fetch('/eliminar_usuarios_excel', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('output').textContent = `Output: ${data.output}\nError: ${data.error}`;
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        document.getElementById('form-crear-usuario').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const nombre = document.getElementById('nombre').value;
+            const contrasena = document.getElementById('contrasena').value;
+
+            fetch('/crear_usuario', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ nombre, contrasena })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('output').textContent = `Output: ${data.output}\nError: ${data.error}`;
+                })
+                .catch(error => console.error('Error:', error));
+        });
+        document.getElementById('form-eliminar-usuario').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const nombre = document.getElementById('nombre-eliminar').value;
+
+            fetch('/eliminar_usuario', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ nombre })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('output').textContent = `Output: ${data.output}\nError: ${data.error}`;
+                })
+                .catch(error => console.error('Error:', error));
+        });
+        document.getElementById('form-crear-carpeta').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const nombre_usuario = document.getElementById('nombre-usuario-carpeta').value;
+            const nombre_carpeta = document.getElementById('nombre-carpeta').value;
+
+            fetch('/crear_carpeta', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ nombre_usuario, nombre_carpeta })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('output').textContent = `Output: ${data.output}\nError: ${data.error}`;
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        document.getElementById('form-habilitar-permisos').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const nombre_usuario = document.getElementById('nombre-usuario-permisos').value;
+            const nombre_carpeta = document.getElementById('nombre-carpeta-permisos').value;
+
+            fetch('/habilitar_permisos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ nombre_usuario, nombre_carpeta })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('output').textContent = `Output: ${data.output}\nError: ${data.error}`;
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        document.getElementById('form-eliminar-permisos').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const nombre_usuario = document.getElementById('nombre-usuario-eliminar-permisos').value;
+            const nombre_carpeta = document.getElementById('nombre-carpeta-eliminar-permisos').value;
+
+            fetch('/eliminar_permisos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ nombre_usuario, nombre_carpeta })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('output').textContent = `Output: ${data.output}\nError: ${data.error}`;
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
