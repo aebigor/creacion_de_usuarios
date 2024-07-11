@@ -6,16 +6,16 @@ import os
 app = Flask(__name__)
 
 # Ruta al archivo Excel
-ruta_excel = "C:\\Users\\Santiago\\Documents\\usuarios.xlsx"
+ruta_excel = "C:\\Users\\santiago.basto\\Documents\\usuarios.xlsx"
 
 # Ruta a los scripts de PowerShell
-script_path_create = "C:\\Users\\Santiago\\Documents\\crear_usuarios_excel.ps1"
-script_path_delete = "C:\\Users\\Santiago\\Documents\\eliminar_usuarios_excel.ps1"
-script_path_create_user = "C:\\Users\\Santiago\\Documents\\crear_usuario.ps1"
-script_path_delete_user = "C:\\Users\\Santiago\\Documents\\eliminar_usuario.ps1"
-script_path_create_folder = "C:\\Users\\Santiago\\Documents\\crear_carpeta.ps1"
-script_path_enable_permissions = "C:\\Users\\Santiago\\Documents\\habilitar_permisos.ps1"
-script_path_disable_permissions = "C:\\Users\\Santiago\\Documents\\eliminar_permisos.ps1"
+script_path_create = "C:\\Users\\santiago.basto\\Documents\\crear_usuarios_excel.ps1"
+script_path_delete = "C:\\Users\\santiago.basto\\Documents\\eliminar_usuarios_excel.ps1"
+script_path_create_user = "C:\\Users\\santiago.basto\\Documents\\crear_usuario.ps1"
+script_path_delete_user = "C:\\Users\\santiago.basto\\Documents\\eliminar_usuario.ps1"
+script_path_create_folder = "C:\\Users\\santiago.basto\\Documents\\crear_carpeta.ps1"
+script_path_enable_permissions = "C:\\Users\\santiago.basto\\Documents\\habilitar_permisos.ps1"
+script_path_disable_permissions = "C:\\Users\\santiago.basto\\Documents\\eliminar_permisos.ps1"
 
 @app.route('/')
 def index():
