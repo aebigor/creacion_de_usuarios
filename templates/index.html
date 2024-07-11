@@ -12,6 +12,31 @@
             margin: 0;
             padding: 0;
             display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-right: 20px;
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
             flex-direction: column;
             align-items: center;
         }
@@ -61,10 +86,29 @@
             border-radius: 4px;
             cursor: pointer;
             width: 100%;
+            margin-bottom: 10px;
         }
 
         button:hover {
             background-color: #357ab8;
+        }
+
+        table {
+            background-color: #fff;
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #f4f4f9;
         }
 
         pre {
@@ -80,119 +124,148 @@
     </style>
 </head>
 <body>
-    <h1>Dashboard de Usuarios</h1>
-    <button id="leer-excel">Leer Excel</button>
-    <button id="guardar-excel">Guardar Excel</button>
-    <button id="crear-usuarios-excel">Crear Usuarios desde Excel</button>
-    <button id="eliminar-usuarios-excel">Eliminar Usuarios desde Excel</button>
+    <div class="container">
+        <div class="sidebar">
+            <h1>Dashboard de Usuarios</h1>
+            <button id="leer-excel">Leer Excel</button>
+            <button id="guardar-excel">Guardar Excel</button>
+            <button id="crear-usuarios-excel">Crear Usuarios desde Excel</button>
+            <button id="eliminar-usuarios-excel">Eliminar Usuarios desde Excel</button>
+        </div>
 
-    <h2>Crear Usuario Individual</h2>
-    <form id="form-crear-usuario">
-        <label for="nombre">Nombre de Usuario:</label>
-        <input type="text" id="nombre" name="nombre" required>
-        <br>
-        <label for="contrasena">Contraseña:</label>
-        <input type="password" id="contrasena" name="contrasena" required>
-        <br>
-        <button type="submit">Crear Usuario</button>
-    </form>
+        <div class="content">
+            <h2>Crear Usuario Individual</h2>
+            <form id="form-crear-usuario">
+                <label for="nombre">Nombre de Usuario:</label>
+                <input type="text" id="nombre" name="nombre" required>
+                <br>
+                <label for="contrasena">Contraseña:</label>
+                <input type="password" id="contrasena" name="contrasena" required>
+                <br>
+                <button type="submit">Crear Usuario</button>
+            </form>
 
-    <table id="tabla-usuarios">
-        <thead>
-            <tr>
-                <th>Usuario</th>
-                <th>Contraseña</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-    <h2>Eliminar Usuario Individual</h2>
-    <form id="form-eliminar-usuario">
-        <label for="nombre-eliminar">Nombre de Usuario:</label>
-        <input type="text" id="nombre-eliminar" name="nombre-eliminar" required>
-        <br>
-        <button type="submit">Eliminar Usuario</button>
-    </form>
-    <h2>Crear Carpeta para Usuario</h2>
-    <form id="form-crear-carpeta">
-        <label for="nombre-usuario-carpeta">Nombre de Usuario:</label>
-        <input type="text" id="nombre-usuario-carpeta" name="nombre-usuario-carpeta" required>
-        <br>
-        <label for="nombre-carpeta">Nombre de Carpeta:</label>
-        <input type="text" id="nombre-carpeta" name="nombre-carpeta" required>
-        <br>
-        <button type="submit">Crear Carpeta</button>
-    </form>
+            <h2>Eliminar Usuario Individual</h2>
+            <form id="form-eliminar-usuario">
+                <label for="nombre-eliminar">Nombre de Usuario:</label>
+                <input type="text" id="nombre-eliminar" name="nombre-eliminar" required>
+                <br>
+                <button type="submit">Eliminar Usuario</button>
+            </form>
 
-    <!-- Formulario para habilitar permisos -->
-    <form action="/habilitar_permisos" method="post">
-        <label for="nombre_usuario">Nombre de Usuario:</label>
-        <input type="text" id="nombre_usuario" name="nombre_usuario" required>
-        <label for="nombre_carpeta">Nombre de Carpeta:</label>
-        <input type="text" id="nombre_carpeta" name="nombre_carpeta" required>
-        <button type="submit">Habilitar Permisos</button>
-    </form>
+            <h2>Crear Carpeta para Usuario</h2>
+            <form id="form-crear-carpeta">
+                <label for="nombre-usuario-carpeta">Nombre de Usuario:</label>
+                <input type="text" id="nombre-usuario-carpeta" name="nombre-usuario-carpeta" required>
+                <br>
+                <label for="nombre-carpeta">Nombre de Carpeta:</label>
+                <input type="text" id="nombre-carpeta" name="nombre-carpeta" required>
+                <br>
+                <button type="submit">Crear Carpeta</button>
+            </form>
 
-    <!-- Formulario para eliminar permisos -->
-    <form action="/eliminar_permisos" method="post">
-        <label for="nombre_usuario">Nombre de Usuario:</label>
-        <input type="text" id="nombre_usuario" name="nombre_usuario" required>
-        <label for="nombre_carpeta">Nombre de Carpeta:</label>
-        <input type="text" id="nombre_carpeta" name="nombre_carpeta" required>
-        <button type="submit">Eliminar Permisos</button>
-    </form>
+            <h2>Permisos</h2>
+            <form action="/habilitar_permisos" method="post">
+                <label for="nombre_usuario">Nombre de Usuario:</label>
+                <input type="text" id="nombre_usuario" name="nombre_usuario" required>
+                <label for="nombre_carpeta">Nombre de Carpeta:</label>
+                <input type="text" id="nombre_carpeta" name="nombre_carpeta" required>
+                <button type="submit">Habilitar Permisos</button>
+            </form>
 
+            <form action="/eliminar_permisos" method="post">
+                <label for="nombre_usuario">Nombre de Usuario:</label>
+                <input type="text" id="nombre_usuario" name="nombre_usuario" required>
+                <label for="nombre_carpeta">Nombre de Carpeta:</label>
+                <input type="text" id="nombre_carpeta" name="nombre_carpeta" required>
+                <button type="submit">Eliminar Permisos</button>
+            </form>
 
-    <pre id="output"></pre>
+            <table id="tabla-usuarios">
+                <thead>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Contraseña</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+
+            <pre id="output"></pre>
+        </div>
+    </div>
 
 
     <script>
-        document.getElementById('leer-excel').addEventListener('click', () => {
-            fetch('/leer_excel')
-                .then(response => response.json())
-                .then(data => {
-                    const tbody = document.getElementById('tabla-usuarios').getElementsByTagName('tbody')[0];
-                    tbody.innerHTML = '';
-                    data.forEach(fila => {
-                        const tr = document.createElement('tr');
-                        const tdUsuario = document.createElement('td');
-                        tdUsuario.textContent = fila.Usuario;
-                        tdUsuario.contentEditable = true;
-                        const tdContrasena = document.createElement('td');
-                        tdContrasena.textContent = fila.Contrasena;
-                        tdContrasena.contentEditable = true;
-                        tr.appendChild(tdUsuario);
-                        tr.appendChild(tdContrasena);
-                        tbody.appendChild(tr);
+
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('leer-excel').addEventListener('click', () => {
+                fetch('/leer_excel')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Ocurrió un problema al leer el archivo Excel.');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const tbody = document.getElementById('tabla-usuarios').getElementsByTagName('tbody')[0];
+                        tbody.innerHTML = '';
+                        if (data.length === 0) {
+                            document.getElementById('output').textContent = 'No hay datos en el archivo Excel.';
+                            return;
+                        }
+                        data.forEach(fila => {
+                            const tr = document.createElement('tr');
+                            const tdUsuario = document.createElement('td');
+                            const inputUsuario = document.createElement('input');
+                            inputUsuario.type = 'text';
+                            inputUsuario.value = fila.usuario || 'N/A';
+                            tdUsuario.appendChild(inputUsuario);
+                            const tdContrasena = document.createElement('td');
+                            const inputContrasena = document.createElement('input');
+                            inputContrasena.type = 'text';
+                            inputContrasena.value = fila.contraseña || 'N/A';
+                            tdContrasena.appendChild(inputContrasena);
+                            tr.appendChild(tdUsuario);
+                            tr.appendChild(tdContrasena);
+                            tbody.appendChild(tr);
+                        });
+                        document.getElementById('output').textContent = 'Datos del Excel cargados correctamente.';
+                    })
+                    .catch(error => {
+                        document.getElementById('output').textContent = 'Error: ' + error.message;
+                        console.error('Error:', error);
                     });
-                })
-                .catch(error => console.error('Error:', error));
-        });
-
-        document.getElementById('guardar-excel').addEventListener('click', () => {
-            const tbody = document.getElementById('tabla-usuarios').getElementsByTagName('tbody')[0];
-            const filas = Array.from(tbody.getElementsByTagName('tr'));
-            const data = filas.map(fila => {
-                const celdas = fila.getElementsByTagName('td');
-                return {
-                    Usuario: celdas[0].textContent,
-                    Contrasena: celdas[1].textContent
-                };
             });
+            document.getElementById('guardar-excel').addEventListener('click', () => {
+                const tbody = document.getElementById('tabla-usuarios').getElementsByTagName('tbody')[0];
+                const filas = Array.from(tbody.getElementsByTagName('tr'));
+                const data = filas.map(fila => {
+                    const celdas = fila.getElementsByTagName('td');
+                    return {
+                        usuario: celdas[0].getElementsByTagName('input')[0].value,
+                        contraseña: celdas[1].getElementsByTagName('input')[0].value
+                    };
+                });
 
-            fetch('/guardar_excel', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('output').textContent = data.message || data.error;
+                fetch('/guardar_excel', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
                 })
-                .catch(error => console.error('Error:', error));
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('output').textContent = data.message || data.error;
+                    })
+                    .catch(error => {
+                        document.getElementById('output').textContent = 'Error: ' + error.message;
+                        console.error('Error:', error);
+                    });
+            });
         });
 
         document.getElementById('crear-usuarios-excel').addEventListener('click', () => {
@@ -304,6 +377,36 @@
                 })
                 .catch(error => console.error('Error:', error));
         });
+        document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('leer-excel').addEventListener('click', () => {
+            fetch('/leer_excel')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Ocurrió un problema al leer el archivo Excel.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const tbody = document.getElementById('tabla-usuarios').getElementsByTagName('tbody')[0];
+                    tbody.innerHTML = '';
+                    data.forEach(fila => {
+                        const tr = document.createElement('tr');
+                        const tdUsuario = document.createElement('td');
+                        tdUsuario.textContent = fila.Usuario;
+                        const tdContrasena = document.createElement('td');
+                        tdContrasena.textContent = fila.Contrasena;
+                        tr.appendChild(tdUsuario);
+                        tr.appendChild(tdContrasena);
+                        tbody.appendChild(tr);
+                    });
+                    document.getElementById('output').textContent = 'Datos del Excel cargados correctamente.';
+                })
+                .catch(error => {
+                    document.getElementById('output').textContent = 'Error: ' + error.message;
+                    console.error('Error:', error);
+                });
+        });
+    });
     </script>
 </body>
 </html>
